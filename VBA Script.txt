@@ -1,0 +1,61 @@
+Sub Stocks()
+
+Dim ws As Worksheet
+Dim yo As Double
+Dim yclo As Double
+Dim ychg As Double
+
+On Error Resume Next
+
+
+For Each ws In ThisWorkbook.Worksheets
+
+    ws.Cells(1, 9).Value = "Ticker"
+    ws.Cells(1, 10).Value = "Yearly Change"
+    ws.Cells(1, 11).Value = "Percent Change"
+    ws.Cells(1, 12).Value = "Total Stock Volume"
+    
+L = 2
+
+    For i = 2 To ws.UsedRange.Rows.Count
+         If ws.Cells(i + 1, 1).Value <> ws.Cells(i, 1).Value Then
+    
+    ws.Cells(L, 9).Value = ws.Cells(i, 1).Value
+    L = L + 1
+    
+    End If
+    
+    Next i
+    
+L = 2
+   
+    For x = 0 To ws.UsedRange.Rows.Count
+            y = (260 * x) + 2
+            Z = y + 260
+
+            yo = ws.Cells(y + x, 3).Value
+            yclo = ws.Cells(Z + x, 6).Value
+    
+    ws.Cells(L, 10).Value = (yclo - yo)
+    ws.Cells(L, 11).Value = ((yclo - yo) / yclo)
+    ws.Cells(L, 11).NumberFormat = "0.00000000%"
+    ws.Cells(L, 12).Value = WorksheetFunction.Sum(Cells(y + x, 7), Cells(Z + x, 7))
+    
+    
+    
+    L = L + 1
+    
+    Next x
+        
+
+            For c = 2 To ws.UsedRange.Rows.Count
+            
+            If ws.Cells(c, 10).Value >= 0 Then Cells(c, 10).Interior.Color = vbGreen
+            
+            If ws.Cells(c, 10).Value <= 0 Then Cells(c, 10).Interior.Color = vbRed
+    
+Next c
+    
+    Next ws
+    
+End Sub
